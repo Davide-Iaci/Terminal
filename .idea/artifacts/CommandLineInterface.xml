@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="CommandLineInterface">
+    <output-path>$PROJECT_DIR$/out/artifacts/CommandLineInterface</output-path>
+    <root id="archive" name="CommandLineInterface.jar" />
+  </artifact>
+</component>
