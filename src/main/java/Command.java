@@ -1,8 +1,11 @@
+import com.googlecode.lanterna.TerminalPosition;
 import org.unix4j.Unix4j;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
 /**
@@ -13,7 +16,7 @@ import java.util.StringTokenizer;
  */
 public class Command {
 
-    private CLI commandLineInterface = null;
+    private CLI commandLineInterface;
 
     private StringTokenizer stringTokenizer; // permise to split the string command
     private ArrayList<String> commandParts; // syntax: command [-options] [arguments]
@@ -54,7 +57,6 @@ public class Command {
         if (!commandParts.isEmpty()) { // if the command is not empty
             switch (name) { // name of command
                 case "cat":
-                    // TODO legge contenuto file
                     File f = new File(argument.get(0));
                     if (!f.isDirectory()) { // check that is not a directory
                         if (!argument.isEmpty()) {
@@ -69,6 +71,10 @@ public class Command {
                     } else {
                         output = "cat: read error: Is a directory";
                     }
+                    break;
+                case "clear":
+                    commandLineInterface.screen.clear(); // clear screen
+                    commandLineInterface.screen.setCursorPosition(new TerminalPosition(0, 0));
                     break;
 //                case "cd":
 //                    if (argument.get(0).equals(".")) {
@@ -86,7 +92,7 @@ public class Command {
 //                            output = "bash: cd: can't cd to " + argument.get(0) + ": No such file or directory";
 //                    }
 //                    break;
-                case "echo": {
+                case "echo":
                     // option not supported yet
                     StringBuilder completeArgument = new StringBuilder(); // the sum of all arguments
                     for (String args : argument)
@@ -98,7 +104,13 @@ public class Command {
                         output = "echo: options not yet supported by the command";
                     }
                     break;
-                }
+                case "exit":
+                    try {
+                        commandLineInterface.screen.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 case "grep":
                     // TODO filtra contenuto file
                     break;
@@ -164,8 +176,29 @@ public class Command {
                     } else
                         output = "Usage: touch FILE (no blanks)";
                     break;
-                case "wget":
+                case "wget": // download a file with inside the html of a page
                     // TODO scarica file da internet
+                    if (!argument.isEmpty()) {
+                        // read html page
+                        URL url = null;
+                        // try to open the page before with http and in case then with https
+                        try {
+                            url = new URL(argument.get(0)); // create the URL via the argument passed by argument
+                            Scanner scanner = new Scanner(url.openStream());
+                            StringBuffer fileContent = new StringBuffer();
+                            while (scanner.hasNext()) {
+                                fileContent.append(scanner.next());
+                            }
+                        } catch (IOException e) { // if url is not found
+                            output = "wget: bad address '" + argument.get(0) + "'";
+                        }
+
+                        // create file with inside the content read before
+//                        File html = new File("");
+
+                    } else {
+                        output = "(argument is necessary) syntax: wget URL";
+                    }
                     break;
                 default:
                     output = "bash: " + command + ": command not found";
