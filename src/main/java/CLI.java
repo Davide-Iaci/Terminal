@@ -20,12 +20,12 @@ public class CLI {
 
     // terminal component
     private Terminal terminal = null;
-    private Screen screen = null;
+    public Screen screen = null;
     private TextGraphics textGraphics = null;
     private boolean isRunning = false; // true if the terminal is running
 
     // structure of the prompt (part before user input)
-    private String promptStructure = "";
+    public String promptStructure = "";
     private final String userInformation = System.getProperty("user.name") + "@localhost";
     public String location = "~";
 
@@ -72,6 +72,7 @@ public class CLI {
     private void onTerminalRun() throws IOException {
         // while terminal is running user can insert input
         while (isRunning) {
+            boolean horizontalArrowIsClicked = false;
             // user input
             // input key
             KeyStroke key = screen.readInput();
@@ -103,6 +104,7 @@ public class CLI {
                         decrementCursorColumn(1);
                         screen.refresh();
                     }
+                    horizontalArrowIsClicked = true;
                 }
                 // limit to move right with the cursor
                 case ArrowRight -> {
@@ -110,6 +112,7 @@ public class CLI {
                         incrementCursorColumn(1);
                         screen.refresh();
                     }
+                    horizontalArrowIsClicked = true;
                 }
                 case ArrowUp -> { // command before
                     if (historyIndex < history.size()) { // limit
@@ -129,7 +132,12 @@ public class CLI {
                 }
                 case EOF -> stopTerminal();
             }
-            refreshInput();
+
+            // input is upload only if are not clicked horizontalArrow
+            if (!horizontalArrowIsClicked)
+                refreshInput();
+            else
+                horizontalArrowIsClicked = false;
         }
     }
 
