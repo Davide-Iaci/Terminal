@@ -116,15 +116,17 @@ public class Command {
                     break;
                 case "help":
                     output = """
-                            cat: print FILE to stdout
-                            echo: display a line of text
-                            grep: Search for PATTERN in FILE
-                            help: Display information about builtin commands
-                            ls: list directory contents (only command with option)
-                            pwd: print name of current/working directory
-                            rm: remove FILE
-                            touch: create new file
-                            wget: Retrieve files via HTTP""";
+                            - cat: print FILE to stdout
+                            - clear: clear the terminal screen
+                            - echo: display a line of text
+                            - exit: terminal will close
+                            - grep: search for PATTERN in FILE
+                            - help: display information about builtin commands
+                            - ls: list directory contents (only command with option)
+                            - pwd: print name of current/working directory
+                            - rm: remove FILE
+                            - touch: create new file
+                            - wget: retrieve files via HTTP""";
                     break;
                 case "ls":
                     try {

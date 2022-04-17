@@ -3,11 +3,13 @@ Simple command Line Interface emulator, bash like, based on the <a href="https:/
 
 Commands available:
 - cat: print FILE to stdout
+- clear: clear the terminal screen
 - echo: display a line of text
-- grep: Search for PATTERN in FILE
-- help: Display information about builtin commands
+- exit: terminal will close
+- grep: search for PATTERN in FILE
+- help: display information about builtin commands
 - ls: list directory contents (only command with option)
 - pwd: print name of current/working directory
 - rm: remove FILE
 - touch: create new file
-- wget: Retrieve files via HTTP
+- wget: retrieve files via HTTP
