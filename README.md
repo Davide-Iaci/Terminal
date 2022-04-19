@@ -12,9 +12,8 @@
 
 ## Usage
 
-```sh
-Install and run: download the project and run the jar file in: out/artifacts/Terminal_jar
-```
+
+**Install and run**: download the project and run the jar file in: _out/artifacts/Terminal_jar_
 
 ```sh
 Commands available:
