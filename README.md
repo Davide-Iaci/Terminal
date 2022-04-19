@@ -8,7 +8,7 @@
 
 > Simple command Line Interface emulator, bash like, based on the <a href=&#34;https://github.com/mabe02/lanterna&#34;>Lanterna</a> Java library.
 
-![img](https://github.com/Davide-Iaci/Terminal/tree/master/target/readme-img.pngraw=true)
+![img](https://github.com/Davide-Iaci/Terminal/tree/master/target/readme-img.png)
 
 ## Usage
 
