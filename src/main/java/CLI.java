@@ -70,9 +70,10 @@ public class CLI {
     }
 
     private void onTerminalRun() throws IOException {
+        boolean horizontalArrowIsClicked = false;
+        boolean cursorIsAtEnd = true;
         // while terminal is running user can insert input
         while (isRunning) {
-            boolean horizontalArrowIsClicked = false;
             // user input
             // input key
             KeyStroke key = screen.readInput();
@@ -133,11 +134,15 @@ public class CLI {
                 case EOF -> stopTerminal();
             }
 
-            // input is upload only if are not clicked horizontalArrow
-            if (!horizontalArrowIsClicked)
+            // check if the cursor is at the end of the line
+            cursorIsAtEnd = screen.getCursorPosition().getColumn() >= (promptStructure.length() + terminalBuffer.length());
+            // the cursor is not upload if the cursor it isn't at the end of if horizontal arrow is clicked
+            if (cursorIsAtEnd && !horizontalArrowIsClicked) {
                 refreshInput();
-            else
+            } else {
                 horizontalArrowIsClicked = false;
+                refreshInputNoCursor();
+            }
         }
     }
 
@@ -153,6 +158,13 @@ public class CLI {
         promptStructure = userInformation + ":" + location + "$ "; // set the promptStructure
         textGraphics.putString(0, screen.getCursorPosition().getRow(), promptStructure + terminalBuffer.toString()); // echo user input
         incrementCursorColumn(promptStructure.length() + terminalBuffer.toString().length() - screen.getCursorPosition().getColumn()); // update cursor column position
+        screen.refresh();
+    }
+
+    // it work as refreshInput() but doesn't upload cursor position
+    private void refreshInputNoCursor() throws IOException {
+        promptStructure = userInformation + ":" + location + "$ "; // set the promptStructure
+        textGraphics.putString(0, screen.getCursorPosition().getRow(), promptStructure + terminalBuffer.toString()); // echo user input
         screen.refresh();
     }
 
@@ -196,6 +208,13 @@ public class CLI {
         String output = commandExecutor.executeCommand(terminalBuffer.toString());
         if (!output.isEmpty()) {
             System.out.println(output);
+            int i = 0; //
+//            while (output.charAt(i) == '\n') {
+//            for (int j = 0; j < ; j++) {
+//
+//            }
+            textGraphics.putString(promptStructure.length() + i, screen.getCursorPosition().getRow(), String.valueOf(output.charAt(i)));
+//            }
         }
     }
 

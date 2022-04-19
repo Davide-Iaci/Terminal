@@ -1,12 +1,17 @@
 import com.googlecode.lanterna.TerminalPosition;
 import org.unix4j.Unix4j;
+import org.unix4j.unix.Grep;
+import org.unix4j.unix.grep.GrepOption;
+import org.unix4j.unix.grep.GrepOptions;
 
-import java.io.*;
-import java.net.MalformedURLException;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 /**
  * Represent a command executor
@@ -111,8 +116,22 @@ public class Command {
                         e.printStackTrace();
                     }
                     break;
-                case "grep":
+                case "grep": // filter
                     // TODO filtra contenuto file
+                    // two argument are necessary
+                    if (argument.size() >= 1) {
+                        if (argument.size() >= 2) {
+                            if (!options.isEmpty()) { // TODO fix option
+                                output = Unix4j.grep(GrepOptions.EMPTY, argument.get(0), argument.get(1)).toStringResult();
+                            } else {
+                                output = Unix4j.grep(GrepOptions.EMPTY, argument.get(0), argument.get(1)).toStringResult();
+                            }
+                        } else {
+                            output = "(also FILE is necessary) syntax: grep PATTERN FILE";
+                        }
+                    } else {
+                        output = "(pattern and file are necessary) syntax: grep PATTERN FILE";
+                    }
                     break;
                 case "help":
                     output = """
@@ -120,9 +139,9 @@ public class Command {
                             - clear: clear the terminal screen
                             - echo: display a line of text
                             - exit: terminal will close
-                            - grep: search for PATTERN in FILE
+                            - grep: search for PATTERN in FILE (option valid)
                             - help: display information about builtin commands
-                            - ls: list directory contents (only command with option)
+                            - ls: list directory contents (option valid)
                             - pwd: print name of current/working directory
                             - rm: remove FILE
                             - touch: create new file
@@ -179,25 +198,43 @@ public class Command {
                         output = "Usage: touch FILE (no blanks)";
                     break;
                 case "wget": // download a file with inside the html of a page
-                    // TODO scarica file da internet
                     if (!argument.isEmpty()) {
+                        StringBuilder fileContent = new StringBuilder();
                         // read html page
-                        URL url = null;
-                        // try to open the page before with http and in case then with https
+                        URL url;
                         try {
-                            url = new URL(argument.get(0)); // create the URL via the argument passed by argument
+                            // try to open the page before via http
+                            url = new URL("http://" + argument.get(0)); // create the URL via the argument passed by argument
                             Scanner scanner = new Scanner(url.openStream());
-                            StringBuffer fileContent = new StringBuffer();
                             while (scanner.hasNext()) {
                                 fileContent.append(scanner.next());
                             }
                         } catch (IOException e) { // if url is not found
                             output = "wget: bad address '" + argument.get(0) + "'";
+                            break; // exit from the switch case
                         }
 
                         // create file with inside the content read before
-//                        File html = new File("");
+                        File html = new File("index.html");
+                        if (!html.exists()) {
+                            try {
+                                if (html.createNewFile())
+                                    System.out.println("File successfully created");
+                                else
+                                    System.out.println("Error in file creation");
 
+                                // riempe il file con l'html of the page
+                                FileWriter fileWriter = new FileWriter(html);
+                                fileWriter.write(fileContent.toString());
+                                fileWriter.close();
+
+                                output = "'index.html' saved";
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            output = "wget: can't open 'index.html': File exists";
+                        }
                     } else {
                         output = "(argument is necessary) syntax: wget URL";
                     }
