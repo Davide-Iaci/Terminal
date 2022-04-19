@@ -205,16 +205,14 @@ public class CLI {
 
 //        System.out.println(Unix4j.ls("").toStringResult());
 //        LsOption ls;
-        String output = commandExecutor.executeCommand(terminalBuffer.toString());
+        String output = commandExecutor.executeCommand(terminalBuffer.toString()); // command is execute
         if (!output.isEmpty()) {
-            System.out.println(output);
-            int i = 0; //
-//            while (output.charAt(i) == '\n') {
-//            for (int j = 0; j < ; j++) {
-//
-//            }
-            textGraphics.putString(promptStructure.length() + i, screen.getCursorPosition().getRow(), String.valueOf(output.charAt(i)));
-//            }
+            // print of the output
+            String[] outputToPrint = output.split("\\r\\n"); // split the output by new line
+            for (String line : outputToPrint) {
+                incrementCursorRow(1);
+                textGraphics.putString(0, screen.getCursorPosition().getRow(), line);
+            }
         }
     }
 
