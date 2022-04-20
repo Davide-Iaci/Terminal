@@ -11,7 +11,7 @@
   <downloadUrl>http://java.com/download</downloadUrl>
   <supportUrl>https://github.com/Davide-Iaci/Terminal/issues</supportUrl>
   <stayAlive>false</stayAlive>
-  <restartOnCrash>true</restartOnCrash>
+  <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
   <icon>C:\Users\david\Downloads\terminal-img.ico</icon>
   <jre>

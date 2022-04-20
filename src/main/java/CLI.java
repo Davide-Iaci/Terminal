@@ -209,7 +209,15 @@ public class CLI {
             for (String line : outputToPrint) {
                 scrollLine(1);
                 incrementCursorRow(1);
-                textGraphics.putString(0, screen.getCursorPosition().getRow(), line);
+                try {
+                    textGraphics.putString(0, screen.getCursorPosition().getRow(), line);
+                } catch (IllegalArgumentException e) {
+                    textGraphics.putString(0, screen.getCursorPosition().getRow(), "impossible to read this file");
+                    scrollLine(1);
+                    if (screen.getCursorPosition().getRow() >= screen.getTerminalSize().getRows() - 1)
+                        decrementCursorRow(1);
+                    return;
+                }
                 scrollLine(1);
                 if (screen.getCursorPosition().getRow() >= screen.getTerminalSize().getRows() - 1)
                     decrementCursorRow(1);
