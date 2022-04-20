@@ -211,40 +211,40 @@ public class CLI {
                 incrementCursorRow(1);
                 textGraphics.putString(0, screen.getCursorPosition().getRow(), line);
                 scrollLine(1);
-                decrementCursorRow(1);
+                if (screen.getCursorPosition().getRow() >= screen.getTerminalSize().getRows() - 1)
+                    decrementCursorRow(1);
+                }
+            } else{
+                scrollLine(1);
             }
-        } else {
-            scrollLine(1);
+        }
+
+        private void scrollLine ( int nLine){
+            if (screen.getCursorPosition().getRow() >= screen.getTerminalSize().getRows() - 1)
+                screen.scrollLines(0, screen.getTerminalSize().getRows(), nLine);
+        }
+
+        // TODO  autocomplete commands, filenames or folder names
+        private void autocompletetion () {
+            // TODO autocomplete for command name
+            // TODO autocomplete for file and folder
+        }
+
+        // increment and decrement of cursor position
+
+        private void incrementCursorColumn ( int n){
+            screen.setCursorPosition(new TerminalPosition(screen.getCursorPosition().getColumn() + n, screen.getCursorPosition().getRow()));
+        }
+
+        private void decrementCursorColumn ( int n){
+            screen.setCursorPosition(new TerminalPosition(screen.getCursorPosition().getColumn() - n, screen.getCursorPosition().getRow()));
+        }
+
+        private void incrementCursorRow ( int n){
+            screen.setCursorPosition(new TerminalPosition(screen.getCursorPosition().getColumn(), screen.getCursorPosition().getRow() + n));
+        }
+
+        private void decrementCursorRow ( int n){
+            screen.setCursorPosition(new TerminalPosition(screen.getCursorPosition().getColumn(), screen.getCursorPosition().getRow() - n));
         }
     }
-
-    private void scrollLine(int nLine) {
-        if (screen.getCursorPosition().getRow() >= screen.getTerminalSize().getRows() - 1) {
-            screen.scrollLines(0, screen.getTerminalSize().getRows(), nLine);
-        }
-    }
-
-    // TODO  autocomplete commands, filenames or folder names
-    private void autocompletetion() {
-        // TODO autocomplete for command name
-        // TODO autocomplete for file and folder
-    }
-
-    // increment and decrement of cursor position
-
-    private void incrementCursorColumn(int n) {
-        screen.setCursorPosition(new TerminalPosition(screen.getCursorPosition().getColumn() + n, screen.getCursorPosition().getRow()));
-    }
-
-    private void decrementCursorColumn(int n) {
-        screen.setCursorPosition(new TerminalPosition(screen.getCursorPosition().getColumn() - n, screen.getCursorPosition().getRow()));
-    }
-
-    private void incrementCursorRow(int n) {
-        screen.setCursorPosition(new TerminalPosition(screen.getCursorPosition().getColumn(), screen.getCursorPosition().getRow() + n));
-    }
-
-    private void decrementCursorRow(int n) {
-        screen.setCursorPosition(new TerminalPosition(screen.getCursorPosition().getColumn(), screen.getCursorPosition().getRow() - n));
-    }
-}
