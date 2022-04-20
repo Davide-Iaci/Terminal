@@ -67,6 +67,7 @@ public class Command {
                         if (!argument.isEmpty()) {
                             try {
                                 output = Unix4j.cat(argument.get(0)).toStringResult();
+                                System.out.println(output);
                             } catch (IllegalArgumentException e) {
                                 output = "cat: can't open '" + argument.get(0) + "' : No such file or directory";
                             }
@@ -207,7 +208,7 @@ public class Command {
                             url = new URL("http://" + argument.get(0)); // create the URL via the argument passed by argument
                             Scanner scanner = new Scanner(url.openStream());
                             while (scanner.hasNext()) {
-                                fileContent.append(scanner.next());
+                                fileContent.append(scanner.next()).append(System.getProperty("line.separator"));
                             }
                         } catch (IOException e) { // if url is not found
                             output = "wget: bad address '" + argument.get(0) + "'";
@@ -222,7 +223,6 @@ public class Command {
                                     System.out.println("File successfully created");
                                 else
                                     System.out.println("Error in file creation");
-
                                 // riempe il file con l'html of the page
                                 FileWriter fileWriter = new FileWriter(html);
                                 fileWriter.write(fileContent.toString());
