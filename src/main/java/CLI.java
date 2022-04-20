@@ -201,18 +201,26 @@ public class CLI {
         incrementCursorColumn(promptStructure.length()); // move the cursor after the $
     }
 
-    private void commandOutput() throws IOException {
-
-//        System.out.println(Unix4j.ls("").toStringResult());
-//        LsOption ls;
+    private void commandOutput() {
         String output = commandExecutor.executeCommand(terminalBuffer.toString()); // command is execute
         if (!output.isEmpty()) {
             // print of the output
             String[] outputToPrint = output.split("\\r\\n"); // split the output by new line
             for (String line : outputToPrint) {
                 incrementCursorRow(1);
+                scrollLine();
                 textGraphics.putString(0, screen.getCursorPosition().getRow(), line);
+                    scrollLine();
             }
+        } else {
+            scrollLine();
+        }
+    }
+
+    private void scrollLine() {
+        if (screen.getCursorPosition().getRow() >= screen.getTerminalSize().getRows() - 1) {
+            screen.scrollLines(0, screen.getTerminalSize().getRows(), 1);
+                  decrementCursorRow(1);
         }
     }
 
