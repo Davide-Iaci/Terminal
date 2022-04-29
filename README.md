@@ -22,7 +22,6 @@ Commands available:
     echo: display a line of text
     exit: terminal will close
     grep: search for PATTERN in FILE
-    help: display information about builtin commands
     ls: list directory contents (option valid)
     pwd: print name of current/working directory
     rm: remove FILE
